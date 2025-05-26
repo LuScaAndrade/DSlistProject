@@ -3,6 +3,7 @@ package com.project.dslist.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +20,12 @@ public class GameListService {
 
 	@Transactional(readOnly = true)
 	public List<GameListDTO> findAllGames() {
-		List<GameList> result = gameListRepository.findAll();
-		
-		//Transforma uma lista que era de GamesList para uma lista de DTO
-		return result.stream().map(x -> new GameListDTO(x)).toList();
+		try { 
+			List<GameList> result = gameListRepository.findAll();
+			//Transforma uma lista que era de GamesList para uma lista de DTO
+			return result.stream().map(x -> new GameListDTO(x)).toList();
+		} catch(DataAccessResourceFailureException e) {
+			throw new RuntimeException("Não foi possível encontrar os Dados especificados: ", e);
+		}
 	}
 }
