@@ -19,7 +19,7 @@ public class GameService {
 	private GameRepository gameRepository;
 	
 	@Transactional(readOnly = true)
-	private GameDTO findById(Long id) {
+	public GameDTO findById(Long id) {
 		try {
 			Game result = gameRepository.findById(id).get();
 			return new GameDTO(result);
