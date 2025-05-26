@@ -31,17 +31,23 @@ public class GameService {
 	
 	@Transactional(readOnly = true)
 	public List<GameMinDTO> findAllGames() {
+		try {
 		List<Game> result = gameRepository.findAll();
-		
 		//Transforma uma lista que era de Games para uma lista de DTO
 		return result.stream().map(x -> new GameMinDTO(x)).toList();
+		} catch(DataAccessResourceFailureException e) {
+			throw new RuntimeException("Não foi possível encontrar os Dados especificados: ", e);
+		}
 	}
 	
 	@Transactional(readOnly = true)
 	public List<GameMinDTO> findByList(Long listId) {
-		List<GameMinProjection> result = gameRepository.searchByList(listId);
-		
-		//Transforma a List de projections para uma lista de DTOs
-		return result.stream().map(x -> new GameMinDTO(x)).toList();
+		try {
+			List<GameMinProjection> result = gameRepository.searchByList(listId);
+			//Transforma a List de projections para uma lista de DTOs
+			return result.stream().map(x -> new GameMinDTO(x)).toList();
+		} catch(DataAccessResourceFailureException e) {
+			throw new RuntimeException("Não foi possível encontrar o id especificado: ", e);
+		}
 	}
 }
