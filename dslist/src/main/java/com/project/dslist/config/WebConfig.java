@@ -19,7 +19,7 @@ public class WebConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedMethods("*")
-                        .allowedOrigins(corsOrigins.split(","));
+                        .allowedOrigins(corsOrigins);
             }
         };
     }
